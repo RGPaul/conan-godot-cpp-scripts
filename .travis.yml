@@ -18,7 +18,11 @@ git:
 env:
   global:
     # BINTRAY_KEY
-    secure: "cmzzkhlpQT1e+9rfWttApomNnjpZxKiP+5zoSxihiVC1w/6htKvWwlzQyXzGe8Bwr0y0qBolIfMZYABDB4W6dottP51AVEO/RYDMdWdlvz1ztfnveCsaadaRK8AD6riRNfY7S8JLStX8MaGm6ZmR9b7fQpkoK5sZORdSWcQTEnMhcRrK5A5hQ6ljCG+rjhoisjBgeCsLijJ2JoeQqbq88XE/gddQij7a6XjZtY175sJLzwPopS5mQOU4sF5IRUrR3xYJQ2R53bYyanpOdVe3/Bj0BSAfBs6Lqnsh5RrBqImRjHmYKsQHwZP2Eqm58sXy9cO3InP8A9RxBZp5Pwd/+JaOxJ8DLhnSK6t+Jz2ux3NPe8wuDlUALRZi351MtxTub8pPcPRx0pVm/mFtMivhjf7QpEGsMsb5S2ZfAYIN87RihUpqKd2LfivdgHav416JKBVB9eG0pRCZETu4qO+bTsHN+glAYzjbtWZW/bRqsw0G1AYaiAuQzup76QVPcfHBzQnaMLCXAolD9JFG2JgVOz2tJLK8sAsfJAmOk5bzvG1L0yeFXbFkZGfQM2m06GQ3NXv1Wpy7nXl4voJMwiOS5tF84dxb+dtJXvU6JK0ecOZBKS9xJlLHOpT5cqtYBeZuEKuM/hImPe/3YYgCwDOZYJCSR10bBF07NdOsnSVy3ss="
+    - secure: "cmzzkhlpQT1e+9rfWttApomNnjpZxKiP+5zoSxihiVC1w/6htKvWwlzQyXzGe8Bwr0y0qBolIfMZYABDB4W6dottP51AVEO/RYDMdWdlvz1ztfnveCsaadaRK8AD6riRNfY7S8JLStX8MaGm6ZmR9b7fQpkoK5sZORdSWcQTEnMhcRrK5A5hQ6ljCG+rjhoisjBgeCsLijJ2JoeQqbq88XE/gddQij7a6XjZtY175sJLzwPopS5mQOU4sF5IRUrR3xYJQ2R53bYyanpOdVe3/Bj0BSAfBs6Lqnsh5RrBqImRjHmYKsQHwZP2Eqm58sXy9cO3InP8A9RxBZp5Pwd/+JaOxJ8DLhnSK6t+Jz2ux3NPe8wuDlUALRZi351MtxTub8pPcPRx0pVm/mFtMivhjf7QpEGsMsb5S2ZfAYIN87RihUpqKd2LfivdgHav416JKBVB9eG0pRCZETu4qO+bTsHN+glAYzjbtWZW/bRqsw0G1AYaiAuQzup76QVPcfHBzQnaMLCXAolD9JFG2JgVOz2tJLK8sAsfJAmOk5bzvG1L0yeFXbFkZGfQM2m06GQ3NXv1Wpy7nXl4voJMwiOS5tF84dxb+dtJXvU6JK0ecOZBKS9xJlLHOpT5cqtYBeZuEKuM/hImPe/3YYgCwDOZYJCSR10bBF07NdOsnSVy3ss="
+    - CONAN_USER=rgpaul
+    - CONAN_CHANNEL=stable
+    - LIBRARY_VERSION=20190605
+
 
 ### before installing deps
 before_install:
@@ -55,7 +59,11 @@ script:
   - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
 
   - if [ "$TARGET_PLATFORM" == "macos" ]; then ./build-macos.sh ; fi
-  - if [ "$TARGET_PLATFORM" == "ios" ]; then ./build-ios.sh ; fi
+  - if [ "$TARGET_PLATFORM" == "ios" ]; then
+      export IOS_SDK_VERSION=$(xcodebuild -showsdks | grep iphoneos | awk '{print $4}' | sed 's/[^0-9,\.]*//g');
+      echo "iOS SDK ${IOS_SDK_VERSION}";
+      conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=iOS -s os.version=${IOS_SDK_VERSION} -s arch=${TARGET_ARCH} -s build_type=${TARGET_BUILD_TYPE} -o shared=False;
+    fi
 
 deploy:
   provider: script
@@ -68,16 +76,40 @@ deploy:
 matrix:
   include:
       
-    # iOS
+    # iOS - Release
     - os: osx
       osx_image: xcode10.2
       compiler: clang
       env:
         - TARGET_PLATFORM=ios
+        - TARGET_ARCH=armv8
+        - TARGET_BUILD_TYPE=Release
 
-    # macOS
+      # iOS - Debug
     - os: osx
       osx_image: xcode10.2
       compiler: clang
       env:
-        - TARGET_PLATFORM=macos
+        - TARGET_PLATFORM=ios
+        - TARGET_ARCH=armv8
+        - TARGET_BUILD_TYPE=Debug
+
+    # iOS - Simulator
+    - os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      env:
+        - TARGET_PLATFORM=ios
+        - TARGET_ARCH=x86_64
+        - TARGET_BUILD_TYPE=Debug
+
+    # macOS - Release
+#    - os: osx
+#      osx_image: xcode10.2
+#      compiler: clang
+#      env:
+#        - TARGET_PLATFORM=macos
+#        - TARGET_ARCH=x86_64
+#        - TARGET_BUILD_TYPE=Release
+
+
