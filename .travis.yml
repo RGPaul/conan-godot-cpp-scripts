@@ -23,9 +23,9 @@ env:
 ### before installing deps
 before_install:
   # Download Android NDK from Google
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]  && [ "$TARGET_PLATFORM" == "android" ]]; then
-      curl -sSOL "https://dl.google.com/android/repository/android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip"      
-      unzip -q -o android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TARGET_PLATFORM" == "android" ]]; then
+      curl -sSOL "https://dl.google.com/android/repository/android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip";
+      unzip -q -o android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip;
     fi
 
 ### install deps
@@ -33,7 +33,7 @@ install:
 
   # Install python for windows
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-      choco install python3
+      choco install python3;
     fi
 
   # Install conan
