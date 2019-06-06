@@ -36,7 +36,22 @@ class GodotCppConan(ConanFile):
         if self.settings.os == "iOS":
             ios_toolchain = "cmake-modules/Toolchains/ios.toolchain.cmake"
             cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = ios_toolchain
-            cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = tools.to_apple_arch(self.settings.arch)
+            self.variants = []
+
+            # define all architectures for ios fat library
+            if "arm" in self.settings.arch:
+                self.variants = ["armv7", "armv7s", "armv8"]
+
+            # apply build config for all defined architectures
+            if len(self.variants) > 0:
+                archs = ""
+                for i in range(0, len(self.variants)):
+                    if i == 0:
+                        archs = tools.to_apple_arch(self.variants[i])
+                    else:
+                        archs += ";" + tools.to_apple_arch(self.variants[i])
+                cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = archs
+
             if self.settings.arch == "x86" or self.settings.arch == "x86_64":
                 cmake.definitions["IOS_PLATFORM"] = "SIMULATOR"
             else:
@@ -47,6 +62,15 @@ class GodotCppConan(ConanFile):
 
         cmake.configure(source_folder=library_folder)
         cmake.build()
+
+        lib_dir = os.path.join(self.build_folder, "godot-cpp", "bin")
+
+        # execute ranlib for all static universal libraries (required for fat libraries)
+        if self.settings.os == "iOS" and len(self.variants) > 0:
+            if self.options.shared == False:
+                for f in os.listdir(lib_dir):
+                    if f.endswith(".a") and os.path.isfile(os.path.join(lib_dir,f)) and not os.path.islink(os.path.join(lib_dir,f)):
+                        self.run("xcrun ranlib %s" % os.path.join(lib_dir,f))
 
     def package(self):
         self.copy("*", dst="include", src='godot-cpp/include')
@@ -59,6 +83,10 @@ class GodotCppConan(ConanFile):
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.includedirs = ['include']
+
+    def package_id(self):
+        if "arm" in self.settings.arch and self.settings.os == "iOS":
+            self.info.settings.arch = "AnyARM"
 
     def config_options(self):
         # remove android specific option for all other platforms

@@ -44,11 +44,7 @@ function createConanPackage()
 #=======================================================================================================================
 # create packages for all architectures and build types
 
-# iOS
-createConanPackage armv7 Release
-createConanPackage armv7 Debug
-createConanPackage armv7s Release
-createConanPackage armv7s Debug
+# iOS (any arm arch will build fat libraries with armv7, armv7s and armv8 and set arch to 'AnyARM')
 createConanPackage armv8 Release
 createConanPackage armv8 Debug
 # SIMULATOR
