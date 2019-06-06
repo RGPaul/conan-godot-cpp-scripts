@@ -57,7 +57,12 @@ script:
   - if [ "$TARGET_PLATFORM" == "macos" ]; then ./build-macos.sh ; fi
   - if [ "$TARGET_PLATFORM" == "ios" ]; then ./build-ios.sh ; fi
 
-# - conan upload "*" -r rgpaul --all
+deploy:
+  provider: script
+  script: bash .travis/deploy.sh
+  on:
+    tags: true
+    all_branches: true
 
 ### build matrix
 matrix:
