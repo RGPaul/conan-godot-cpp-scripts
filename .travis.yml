@@ -5,8 +5,8 @@ language: cpp
 # Use Ubuntu 16.04 (Xenial)
 dist: xenial
 
-# Only build tags
-if: tag IS present
+# Only build master and tags
+if: branch = master OR tag IS present
 
 git:
     submodules: true
@@ -20,7 +20,7 @@ env:
     - CONAN_REPOSITORY_NAME=rgpaul
     - CONAN_USER=rgpaul
     - CONAN_CHANNEL=stable
-    - LIBRARY_VERSION=${TRAVIS_TAG}
+    - LIBRARY_VERSION=20190605
 
 ### before installing deps
 before_install:
