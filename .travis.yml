@@ -6,7 +6,7 @@ language: cpp
 dist: xenial
 
 # Only build master and tags
-if: branch = master OR tag IS present
+if: branch IN (master, develop) OR tag IS present
 
 git:
     submodules: true
