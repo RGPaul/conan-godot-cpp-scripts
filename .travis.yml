@@ -1,0 +1,100 @@
+
+# C++ project
+language: cpp
+
+# Use Ubuntu 16.04 (Xenial)
+dist: xenial
+
+branches:
+  only:
+    - master
+
+# Only build tags
+#if: tag IS present
+
+git:
+    submodules: true
+
+env:
+  global:
+    # BINTRAY_KEY
+    secure: "cmzzkhlpQT1e+9rfWttApomNnjpZxKiP+5zoSxihiVC1w/6htKvWwlzQyXzGe8Bwr0y0qBolIfMZYABDB4W6dottP51AVEO/RYDMdWdlvz1ztfnveCsaadaRK8AD6riRNfY7S8JLStX8MaGm6ZmR9b7fQpkoK5sZORdSWcQTEnMhcRrK5A5hQ6ljCG+rjhoisjBgeCsLijJ2JoeQqbq88XE/gddQij7a6XjZtY175sJLzwPopS5mQOU4sF5IRUrR3xYJQ2R53bYyanpOdVe3/Bj0BSAfBs6Lqnsh5RrBqImRjHmYKsQHwZP2Eqm58sXy9cO3InP8A9RxBZp5Pwd/+JaOxJ8DLhnSK6t+Jz2ux3NPe8wuDlUALRZi351MtxTub8pPcPRx0pVm/mFtMivhjf7QpEGsMsb5S2ZfAYIN87RihUpqKd2LfivdgHav416JKBVB9eG0pRCZETu4qO+bTsHN+glAYzjbtWZW/bRqsw0G1AYaiAuQzup76QVPcfHBzQnaMLCXAolD9JFG2JgVOz2tJLK8sAsfJAmOk5bzvG1L0yeFXbFkZGfQM2m06GQ3NXv1Wpy7nXl4voJMwiOS5tF84dxb+dtJXvU6JK0ecOZBKS9xJlLHOpT5cqtYBeZuEKuM/hImPe/3YYgCwDOZYJCSR10bBF07NdOsnSVy3ss="
+
+### before installing deps
+before_install:
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]  && [ "$TARGET_PLATFORM" == "android" ]]; then
+      # Download Android NDK from Google
+      curl -sSOL "https://dl.google.com/android/repository/android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip"      
+      unzip -q -o android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip
+    fi
+
+### install deps
+install:
+
+  # Install python for windows
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]
+      choco install python3
+    fi
+
+  # Install conan
+  - pip3 install conan
+
+  # Add rgpaul conan repository and apply conan config
+  - conan remote add rgpaul https://api.bintray.com/conan/manromen/rgpaul
+  - conan config install ${TRAVIS_BUILD_DIR}/.travis/conan/config.zip
+
+  # login to conan bintray
+  - conan user -p "$BINTRAY_KEY" -r rgpaul manromen
+
+# - conan upload "*" -r rgpaul --all
+
+### build script
+script:
+  # show OS/compiler version
+  - uname -a
+
+  # make sure CXX is correctly set
+  - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
+
+  - if [ "$TARGET_PLATFORM" == "macos" ]; then ./build-macos.sh ; fi
+  - if [ "$TARGET_PLATFORM" == "ios" ]; then ./build-ios.sh ; fi
+
+### build matrix
+matrix:
+  include:
+
+    # arm64-v8a
+    #- os: linux
+    #  env:
+    #    - TARGET_PLATFORM=android
+    #    - TRAVIS_ANDROID_NDK_VERSION=r19c
+    #    - TRAVIS_ANDROID_ARCH=arm64-v8a
+    #  addons:
+    #  apt:
+    #    sources: ['ubuntu-toolchain-r-test']
+    #    packages: ['g++-5' ]
+
+    # Linux / GCC
+    - os: linux
+      compiler: gcc
+      env:
+        - TARGET_PLATFORM=linux
+      addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-5', 'ninja-build']
+    
+    # iOS
+    - os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      env:
+        - TARGET_PLATFORM=ios
+
+    # macOS
+    - os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      env:
+        - TARGET_PLATFORM=macos
