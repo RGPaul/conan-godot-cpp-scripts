@@ -3,7 +3,7 @@ import os
 
 class GodotCppConan(ConanFile):
     name = "godot-cpp"
-    version = "20190505"
+    version = "20190605"
     author = "Ralph-Gordon Paul (gordon@rgpaul.com)"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "android_ndk": "ANY", 
