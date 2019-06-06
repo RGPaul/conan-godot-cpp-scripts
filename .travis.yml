@@ -22,9 +22,8 @@ env:
 
 ### before installing deps
 before_install:
-
+  # Download Android NDK from Google
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]  && [ "$TARGET_PLATFORM" == "android" ]]; then
-      # Download Android NDK from Google
       curl -sSOL "https://dl.google.com/android/repository/android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip"      
       unzip -q -o android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip
     fi
@@ -33,7 +32,7 @@ before_install:
 install:
 
   # Install python for windows
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
       choco install python3
     fi
 
@@ -47,8 +46,6 @@ install:
   # login to conan bintray
   - conan user -p "$BINTRAY_KEY" -r rgpaul manromen
 
-# - conan upload "*" -r rgpaul --all
-
 ### build script
 script:
   # show OS/compiler version
@@ -60,31 +57,12 @@ script:
   - if [ "$TARGET_PLATFORM" == "macos" ]; then ./build-macos.sh ; fi
   - if [ "$TARGET_PLATFORM" == "ios" ]; then ./build-ios.sh ; fi
 
+# - conan upload "*" -r rgpaul --all
+
 ### build matrix
 matrix:
   include:
-
-    # arm64-v8a
-    #- os: linux
-    #  env:
-    #    - TARGET_PLATFORM=android
-    #    - TRAVIS_ANDROID_NDK_VERSION=r19c
-    #    - TRAVIS_ANDROID_ARCH=arm64-v8a
-    #  addons:
-    #  apt:
-    #    sources: ['ubuntu-toolchain-r-test']
-    #    packages: ['g++-5' ]
-
-    # Linux / GCC
-    - os: linux
-      compiler: gcc
-      env:
-        - TARGET_PLATFORM=linux
-      addons:
-      apt:
-        sources: ['ubuntu-toolchain-r-test']
-        packages: ['g++-5', 'ninja-build']
-    
+      
     # iOS
     - os: osx
       osx_image: xcode10.2
