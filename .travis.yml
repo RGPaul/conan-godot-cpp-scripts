@@ -35,7 +35,7 @@ install:
 
   # Install python for windows
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-      choco install python3;
+      powershell choco install python3;
     fi
 
   # Install conan
@@ -70,6 +70,11 @@ script:
       conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=iOS -s os.version=${IOS_SDK_VERSION} -s arch=${TARGET_ARCH} -s build_type=${TARGET_BUILD_TYPE} -o shared=False;
     fi
 
+  # Windows Builds
+  - if [ "$TARGET_PLATFORM" == "windows" ]; then
+      conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Windows -s compiler="Visual Studio" -s compiler.runtime=MT -s arch=${TARGET_ARCH} -s build_type=${TARGET_BUILD_TYPE} -o shared=False;
+    fi
+
 deploy:
   provider: script
   script: bash .travis/conan-deploy.sh
@@ -81,48 +86,55 @@ deploy:
 matrix:
   include:
       
-    # iOS - Release
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=ios
-        - TARGET_ARCH=armv8
-        - TARGET_BUILD_TYPE=Release
+   #  # iOS - Release
+   # - os: osx
+   #   osx_image: xcode10.2
+   #   compiler: clang
+   #   env:
+   #     - TARGET_PLATFORM=ios
+   #     - TARGET_ARCH=armv8
+   #     - TARGET_BUILD_TYPE=Release
 
-      # iOS - Debug
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=ios
-        - TARGET_ARCH=armv8
-        - TARGET_BUILD_TYPE=Debug
+   #    # iOS - Debug
+   #  - os: osx
+   #    osx_image: xcode10.2
+   #    compiler: clang
+   #    env:
+   #      - TARGET_PLATFORM=ios
+   #      - TARGET_ARCH=armv8
+   #      - TARGET_BUILD_TYPE=Debug
 
-    # iOS - Simulator
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
+   #  # iOS - Simulator
+   #  - os: osx
+   #    osx_image: xcode10.2
+   #    compiler: clang
+   #    env:
+   #      - TARGET_PLATFORM=ios
+   #      - TARGET_ARCH=x86_64
+   #      - TARGET_BUILD_TYPE=Debug
+
+   #  # macOS - Release
+   #  - os: osx
+   #    osx_image: xcode10.2
+   #    compiler: clang
+   #    env:
+   #      - TARGET_PLATFORM=macos
+   #      - TARGET_ARCH=x86_64
+   #      - TARGET_BUILD_TYPE=Release
+
+   #  # macOS - Debug
+   #  - os: osx
+   #    osx_image: xcode10.2
+   #    compiler: clang
+   #    env:
+   #      - TARGET_PLATFORM=macos
+   #      - TARGET_ARCH=x86_64
+   #      - TARGET_BUILD_TYPE=Debug
+
+    # Windows - Debug
+    - os: windows
+      #compiler: clang
       env:
-        - TARGET_PLATFORM=ios
+        - TARGET_PLATFORM=windows
         - TARGET_ARCH=x86_64
         - TARGET_BUILD_TYPE=Debug
-
-    # macOS - Release
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=macos
-        - TARGET_ARCH=x86_64
-        - TARGET_BUILD_TYPE=Release
-
-    # macOS - Debug
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=macos
-        - TARGET_ARCH=x86_64
-        - TARGET_BUILD_TYPE=Debug
-
