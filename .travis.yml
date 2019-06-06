@@ -34,9 +34,9 @@ before_install:
 install:
 
   # Install python for windows
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-      powershell choco install python3;
-    fi
+  #- if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
+  #    powershell choco install python3;
+  #  fi
 
   # Install conan
   - pip3 install conan
@@ -134,7 +134,12 @@ matrix:
     # Windows - Debug
     - os: windows
       #compiler: clang
-      env:
+      before_install:
+        - choco install python  # this install takes at least 1 min 30 sec
+        - python -m pip install --upgrade pip
+      env: 
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - TARGET_PLATFORM=windows
         - TARGET_ARCH=x86_64
         - TARGET_BUILD_TYPE=Debug
+
