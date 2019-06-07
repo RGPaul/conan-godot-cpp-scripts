@@ -27,6 +27,9 @@ class GodotCppConan(ConanFile):
         library_folder = "%s/godot-cpp" % self.source_folder
         cmake.verbose = True
 
+        if self.settings.os == "Windows":
+            cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
+
         if self.settings.os == "Android":
             cmake.definitions["CMAKE_SYSTEM_VERSION"] = self.settings.os.api_level
             cmake.definitions["CMAKE_ANDROID_NDK"] = os.environ["ANDROID_NDK_PATH"]
