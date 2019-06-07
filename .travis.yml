@@ -33,13 +33,21 @@ before_install:
 ### install deps
 install:
 
-  # Install python for windows
-  #- if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-  #    powershell choco install python3;
-  #  fi
+  - echo "TRAVIS_OS_NAME $TRAVIS_OS_NAME"
+  - echo "TARGET_PLATFORM $TARGET_PLATFORM"
 
-  # Install conan
-  - pip3 install conan
+  # Install conan (windows)
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
+      python3 -m pip install --upgrade pip;
+      choco install conan;
+      python3 -m pip install conan;
+    fi
+    # refreshenv ;
+
+  # Install conan (linux / macos)
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] || [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      pip3 install conan;
+    fi
 
   # Add conan repository and apply conan config
   - conan remote add ${CONAN_REPOSITORY_NAME} ${CONAN_REPOSITORY}
@@ -113,14 +121,14 @@ matrix:
    #      - TARGET_ARCH=x86_64
    #      - TARGET_BUILD_TYPE=Debug
 
-   #  # macOS - Release
-   #  - os: osx
-   #    osx_image: xcode10.2
-   #    compiler: clang
-   #    env:
-   #      - TARGET_PLATFORM=macos
-   #      - TARGET_ARCH=x86_64
-   #      - TARGET_BUILD_TYPE=Release
+    # macOS - Release
+    # - os: osx
+    #   osx_image: xcode10.2
+    #   compiler: clang
+    #   env:
+    #     - TARGET_PLATFORM=macos
+    #     - TARGET_ARCH=x86_64
+    #     - TARGET_BUILD_TYPE=Release
 
    #  # macOS - Debug
    #  - os: osx
@@ -134,11 +142,13 @@ matrix:
     # Windows - Debug
     - os: windows
       #compiler: clang
-      before_install:
-        - choco install python  # this install takes at least 1 min 30 sec
-        - python -m pip install --upgrade pip
+      
+      # TODO: remove filter_secrets - for now we have to disable it due to the following issue:
+      # https://travis-ci.community/t/current-known-issues-please-read-this-before-posting-a-new-topic/264/10
+      filter_secrets: false
       env: 
-        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        # - TRAVIS_OS_NAME=windows
+        #- PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - TARGET_PLATFORM=windows
         - TARGET_ARCH=x86_64
         - TARGET_BUILD_TYPE=Debug

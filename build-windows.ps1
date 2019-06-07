@@ -39,6 +39,7 @@ function createConanPackage($arch, $build_type)
 # create packages for all architectures and build types
 
 createConanPackage "x86_64" "Release"
-#createConanPackage "x86_64" "Debug"
-
+createConanPackage "x86_64" "Debug"
+createConanPackage "x86" "Release"
+createConanPackage "x86" "Debug"
 
