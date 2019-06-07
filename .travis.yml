@@ -38,7 +38,7 @@ install:
 
   # Install conan (windows)
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-      python3 -m pip install conan;
+      python -m pip install conan;
     fi
     # python3 -m pip install --upgrade pip;
     # choco install conan;
