@@ -5,8 +5,8 @@
 
 This repository contains the conan receipe that is used to build the godot-cpp packages at [rgpaul bintray](https://bintray.com/manromen/rgpaul).
 
-For Infos about godot-cpp please visit [Github](https://github.com/GodotNativeTools/godot-cpp).
-The library is licensed under the [MIT License](https://github.com/GodotNativeTools/godot-cpp/blob/master/LICENSE.md).
+For Infos about godot-cpp please visit [Github](https://github.com/GodotNativeTools/godot-cpp).  
+The library is licensed under the [MIT License](https://github.com/GodotNativeTools/godot-cpp/blob/master/LICENSE.md).  
 This repository is licensed under the [MIT License](LICENSE).
 
 ## Android
@@ -64,7 +64,7 @@ To create a package for macOS you can run the conan command like this:
 
 To create a package for Windows 10 you can run the conan command like this:
 
-`conan create . godot-cpp/20190605@rgpaul/stable -s os=Windows -s compiler="Visual Studio" -s compiler.runtime=MT -s arch=x86 -s build_type=Release -o shared=False`
+`conan create . godot-cpp/20190605@rgpaul/stable -s os=Windows -s compiler="Visual Studio" -s compiler.runtime=MT -s arch=x86_64 -s build_type=Release -o shared=False`
 
 ### Requirements
 

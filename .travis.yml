@@ -90,7 +90,7 @@ matrix:
         - TARGET_ARCH=armv8
         - TARGET_BUILD_TYPE=Release
 
-      # iOS - Debug
+    # iOS - Debug
     - os: osx
       osx_image: xcode10.2
       compiler: clang
