@@ -26,6 +26,7 @@ class GodotCppConan(ConanFile):
         cmake = CMake(self)
         library_folder = "%s/godot-cpp" % self.source_folder
         cmake.verbose = True
+        variants = []
 
         if self.settings.os == "Windows":
             cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
@@ -39,20 +40,19 @@ class GodotCppConan(ConanFile):
         if self.settings.os == "iOS":
             ios_toolchain = "cmake-modules/Toolchains/ios.toolchain.cmake"
             cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = ios_toolchain
-            self.variants = []
 
             # define all architectures for ios fat library
             if "arm" in self.settings.arch:
-                self.variants = ["armv7", "armv7s", "armv8"]
+                variants = ["armv7", "armv7s", "armv8"]
 
             # apply build config for all defined architectures
-            if len(self.variants) > 0:
+            if len(variants) > 0:
                 archs = ""
-                for i in range(0, len(self.variants)):
+                for i in range(0, len(variants)):
                     if i == 0:
-                        archs = tools.to_apple_arch(self.variants[i])
+                        archs = tools.to_apple_arch(variants[i])
                     else:
-                        archs += ";" + tools.to_apple_arch(self.variants[i])
+                        archs += ";" + tools.to_apple_arch(variants[i])
                 cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = archs
 
             if self.settings.arch == "x86" or self.settings.arch == "x86_64":
@@ -69,7 +69,7 @@ class GodotCppConan(ConanFile):
         lib_dir = os.path.join(self.build_folder, "godot-cpp", "bin")
 
         # execute ranlib for all static universal libraries (required for fat libraries)
-        if self.settings.os == "iOS" and len(self.variants) > 0:
+        if self.settings.os == "iOS" and len(variants) > 0:
             if self.options.shared == False:
                 for f in os.listdir(lib_dir):
                     if f.endswith(".a") and os.path.isfile(os.path.join(lib_dir,f)) and not os.path.islink(os.path.join(lib_dir,f)):
