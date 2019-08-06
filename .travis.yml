@@ -2,9 +2,6 @@
 # C++ project
 language: cpp
 
-# Use Ubuntu 16.04 (Xenial)
-dist: xenial
-
 # Only build master and tags
 if: branch = master OR tag IS present
 
@@ -20,7 +17,7 @@ env:
     - CONAN_REPOSITORY_NAME=rgpaul
     - CONAN_USER=rgpaul
     - CONAN_CHANNEL=stable
-    - LIBRARY_VERSION=20190605
+    - CONAN_LIBRARY_VERSION=20190605
 
 ### before installing deps
 before_install:
@@ -28,6 +25,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TARGET_PLATFORM" == "android" ]]; then
       curl -sSOL "https://dl.google.com/android/repository/android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip";
       unzip -q -o android-ndk-${TRAVIS_ANDROID_NDK_VERSION}-linux-x86_64.zip;
+      export ANDROID_NDK_PATH=${TRAVIS_BUILD_DIR}/android-ndk-${TRAVIS_ANDROID_NDK_VERSION};
     fi
 
 ### install deps
@@ -38,8 +36,15 @@ install:
       choco install python3;
     fi
 
-  # Install conan
-  - pip3 install conan
+  # Install conan (linux)
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      pip install conan --user;
+    fi
+
+  # Install conan (macos)
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      pip3 install conan;
+    fi
 
   # Add conan repository and apply conan config
   - conan remote add ${CONAN_REPOSITORY_NAME} ${CONAN_REPOSITORY}
@@ -56,18 +61,23 @@ script:
   # make sure CXX is correctly set
   - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
 
+  # Android Builds
+  - if [ "$TARGET_PLATFORM" == "android" ]; then
+      conan create . ${CONAN_PACKAGE_NAME}/${CONAN_LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Android -s os.api_level=${TRAVIS_ANDROID_API_LEVEL} -s compiler=${TRAVIS_ANDROID_COMPILER} -s compiler.version=${TRAVIS_ANDROID_COMPILER_VERSION} -s compiler.libcxx=${TRAVIS_ANDROID_COMPILER_LIBCXX} -s build_type=${TARGET_BUILD_TYPE} -o android_ndk=${TRAVIS_ANDROID_NDK_VERSION} -o android_stl_type=${TRAVIS_ANDROID_STL_TYPE} -s arch=${TRAVIS_ANDROID_ARCH} -o shared=False;
+    fi
+
   # macOS Builds
   - if [ "$TARGET_PLATFORM" == "macos" ]; then
       export MACOS_SDK_VERSION=$(xcodebuild -showsdks | grep macosx | awk '{print $4}' | sed 's/[^0-9,\.]*//g');
       echo "macOS SDK ${MACOS_SDK_VERSION}";
-      conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Macos -s os.version=${MACOS_SDK_VERSION} -s arch=${TARGET_ARCH} -s build_type=${TARGET_BUILD_TYPE} -o shared=False;
+      conan create . godot-cpp/${CONAN_LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Macos -s os.version=${MACOS_SDK_VERSION} -s arch=${TARGET_ARCH} -s build_type=${TARGET_BUILD_TYPE} -o shared=False;
     fi
 
   # iOS Builds
   - if [ "$TARGET_PLATFORM" == "ios" ]; then
       export IOS_SDK_VERSION=$(xcodebuild -showsdks | grep iphoneos | awk '{print $4}' | sed 's/[^0-9,\.]*//g');
       echo "iOS SDK ${IOS_SDK_VERSION}";
-      conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=iOS -s os.version=${IOS_SDK_VERSION} -s arch=${TARGET_ARCH} -s build_type=${TARGET_BUILD_TYPE} -o shared=False;
+      conan create . godot-cpp/${CONAN_LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=iOS -s os.version=${IOS_SDK_VERSION} -s arch=${TARGET_ARCH} -s build_type=${TARGET_BUILD_TYPE} -o shared=False;
     fi
 
 deploy:
@@ -75,54 +85,71 @@ deploy:
   script: bash .travis/conan-deploy.sh
   on:
     tags: true
-    all_branches: true
 
 ### build matrix
 matrix:
   include:
+
+    ### Android NDK r20 - arm64-v8a ###
+    - os: linux
+      # Ubuntu 16.04 (Xenial)
+      dist: xenial
+      env:
+        - TARGET_PLATFORM=android
+        - TRAVIS_ANDROID_NDK_VERSION=r20
+        - TRAVIS_ANDROID_COMPILER=clang
+        - TRAVIS_ANDROID_COMPILER_VERSION=8.0
+        - TRAVIS_ANDROID_ARCH=armv8
+        - TRAVIS_ANDROID_API_LEVEL=21
+        - TRAVIS_ANDROID_COMPILER_LIBCXX=libc++
+        - TRAVIS_ANDROID_STL_TYPE=c++_static
+        - TARGET_BUILD_TYPE=Release
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-5', 'python3-pip']
       
-    # iOS - Release
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=ios
-        - TARGET_ARCH=armv8
-        - TARGET_BUILD_TYPE=Release
+    # # iOS - Release
+    # - os: osx
+    #   osx_image: xcode10.2
+    #   compiler: clang
+    #   env:
+    #     - TARGET_PLATFORM=ios
+    #     - TARGET_ARCH=armv8
+    #     - TARGET_BUILD_TYPE=Release
 
-    # iOS - Debug
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=ios
-        - TARGET_ARCH=armv8
-        - TARGET_BUILD_TYPE=Debug
+    # # iOS - Debug
+    # - os: osx
+    #   osx_image: xcode10.2
+    #   compiler: clang
+    #   env:
+    #     - TARGET_PLATFORM=ios
+    #     - TARGET_ARCH=armv8
+    #     - TARGET_BUILD_TYPE=Debug
 
-    # iOS - Simulator
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=ios
-        - TARGET_ARCH=x86_64
-        - TARGET_BUILD_TYPE=Debug
+    # # iOS - Simulator
+    # - os: osx
+    #   osx_image: xcode10.2
+    #   compiler: clang
+    #   env:
+    #     - TARGET_PLATFORM=ios
+    #     - TARGET_ARCH=x86_64
+    #     - TARGET_BUILD_TYPE=Debug
 
-    # macOS - Release
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=macos
-        - TARGET_ARCH=x86_64
-        - TARGET_BUILD_TYPE=Release
+    # # macOS - Release
+    # - os: osx
+    #   osx_image: xcode10.2
+    #   compiler: clang
+    #   env:
+    #     - TARGET_PLATFORM=macos
+    #     - TARGET_ARCH=x86_64
+    #     - TARGET_BUILD_TYPE=Release
 
-    # macOS - Debug
-    - os: osx
-      osx_image: xcode10.2
-      compiler: clang
-      env:
-        - TARGET_PLATFORM=macos
-        - TARGET_ARCH=x86_64
-        - TARGET_BUILD_TYPE=Debug
+    # # macOS - Debug
+    # - os: osx
+    #   osx_image: xcode10.2
+    #   compiler: clang
+    #   env:
+    #     - TARGET_PLATFORM=macos
+    #     - TARGET_ARCH=x86_64
+    #     - TARGET_BUILD_TYPE=Debug
 

@@ -32,10 +32,14 @@ class GodotCppConan(ConanFile):
             cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
 
         if self.settings.os == "Android":
-            cmake.definitions["CMAKE_SYSTEM_VERSION"] = self.settings.os.api_level
-            cmake.definitions["CMAKE_ANDROID_NDK"] = os.environ["ANDROID_NDK_PATH"]
-            cmake.definitions["CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION"] = self.settings.compiler
-            cmake.definitions["CMAKE_ANDROID_STL_TYPE"] = self.options.android_stl_type
+            android_toolchain = os.environ["ANDROID_NDK_PATH"] + "/build/cmake/android.toolchain.cmake"
+            cmake.definitions["CMAKE_SYSTEM_NAME"] = "Android"
+            cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = android_toolchain
+            cmake.definitions["ANDROID_NDK"] = os.environ["ANDROID_NDK_PATH"]
+            cmake.definitions["ANDROID_ABI"] = tools.to_android_abi(self.settings.arch)
+            cmake.definitions["ANDROID_STL"] = self.options.android_stl_type
+            cmake.definitions["ANDROID_NATIVE_API_LEVEL"] = self.settings.os.api_level
+            cmake.definitions["ANDROID_TOOLCHAIN"] = "clang"
 
         if self.settings.os == "iOS":
             ios_toolchain = "cmake-modules/Toolchains/ios.toolchain.cmake"
