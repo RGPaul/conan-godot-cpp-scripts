@@ -18,7 +18,7 @@ env:
     - CONAN_USER=rgpaul
     - CONAN_CHANNEL=stable
     - CONAN_PACKAGE_NAME=godot-cpp
-    - CONAN_LIBRARY_VERSION=20190605
+    - CONAN_LIBRARY_VERSION=20190805
 
 ### before installing deps
 before_install:

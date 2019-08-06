@@ -3,7 +3,7 @@ import os
 
 class GodotCppConan(ConanFile):
     name = "godot-cpp"
-    version = "20190605"
+    version = "20190805"
     author = "Ralph-Gordon Paul (gordon@rgpaul.com)"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "android_ndk": "ANY", 
@@ -17,9 +17,9 @@ class GodotCppConan(ConanFile):
     # download sources
     def source(self):
         self.run("git clone https://github.com/GodotNativeTools/godot-cpp.git")
-        self.run("cd godot-cpp && git checkout 5bdcecfc20675ad3bec8ab63df94cf445f0fe54d && cd ..")
+        self.run("cd godot-cpp && git checkout c2ec46f64a24de9a46b06c3e987c306f549ccadb && cd ..")
         self.run("git clone https://github.com/GodotNativeTools/godot_headers.git godot-cpp/godot_headers")
-        self.run("cd godot-cpp/godot_headers && git checkout fb3010491be433f4e44119c743f682bb4710ec72 && cd ../..")
+        self.run("cd godot-cpp/godot_headers && git checkout efea911ad578abc25890f38a6c81bf8f1229aa30 && cd ../..")
 
     # compile using cmake
     def build(self):
