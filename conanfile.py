@@ -81,6 +81,7 @@ class GodotCppConan(ConanFile):
 
     def package(self):
         self.copy("*", dst="include", src='godot-cpp/include')
+        self.copy("*", dst="include/godot_headers", src='godot-cpp/godot_headers')
         self.copy("*.lib", dst="lib", src='godot-cpp/bin', keep_path=False)
         self.copy("*.dll", dst="bin", src='godot-cpp/bin', keep_path=False)
         self.copy("*.so", dst="lib", src='godot-cpp/bin', keep_path=False)
