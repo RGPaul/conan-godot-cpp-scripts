@@ -24,7 +24,7 @@
 $CONAN_USER = "rgpaul"
 $CONAN_CHANNEL = "stable"
 
-$LIBRARY_VERSION = "20190605"
+$LIBRARY_VERSION = "20190805"
 
 #=======================================================================================================================
 # create conan package
