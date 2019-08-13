@@ -31,8 +31,15 @@ $LIBRARY_VERSION = "20190805"
 
 function createConanPackage($arch, $build_type)
 {
+    $runtime = "MT"
+
+    if ($build_type.equals("Debug"))
+    {
+        $runtime = "MTd"
+    }
+
     conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Windows `
-        -s compiler="Visual Studio" -s compiler.runtime=MT -s arch=${arch} -s build_type=${build_type} -o shared=False
+        -s compiler="Visual Studio" -s compiler.runtime=$runtime -s arch=${arch} -s build_type=${build_type} -o shared=False
 }
 
 #=======================================================================================================================
