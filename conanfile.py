@@ -70,14 +70,12 @@ class GodotCppConan(ConanFile):
         cmake.configure(source_folder=library_folder)
         cmake.build()
 
-        lib_dir = os.path.join(self.build_folder, "godot-cpp", "bin")
-
         # execute ranlib for all static universal libraries (required for fat libraries)
-        if self.settings.os == "iOS" and len(variants) > 0:
-            if self.options.shared == False:
-                for f in os.listdir(lib_dir):
-                    if f.endswith(".a") and os.path.isfile(os.path.join(lib_dir,f)) and not os.path.islink(os.path.join(lib_dir,f)):
-                        self.run("xcrun ranlib %s" % os.path.join(lib_dir,f))
+        if self.settings.os == "iOS" and len(variants) > 0 and not self.options.shared:
+            lib_dir = os.path.join(self.build_folder, "godot-cpp", "bin")
+            for f in os.listdir(lib_dir):
+                if f.endswith(".a") and os.path.isfile(os.path.join(lib_dir,f)) and not os.path.islink(os.path.join(lib_dir,f)):
+                    self.run("xcrun ranlib %s" % os.path.join(lib_dir,f))
 
     def package(self):
         self.copy("*", dst="include", src='godot-cpp/include')
