@@ -26,7 +26,6 @@ class GodotCppConan(ConanFile):
         cmake = CMake(self)
         library_folder = "%s/godot-cpp" % self.source_folder
         cmake.verbose = True
-        variants = []
 
         if self.settings.os == "Windows":
             self.applyCmakeSettingsForWindows(cmake)
@@ -44,7 +43,7 @@ class GodotCppConan(ConanFile):
         cmake.build()
 
         # execute ranlib for all static universal libraries (required for fat libraries on iOS)
-        if self.settings.os == "iOS" and len(variants) > 0 and not self.options.shared:
+        if self.settings.os == "iOS" and not self.options.shared:
             self.runRanlibForiOS(os.path.join(self.build_folder, "godot-cpp", "bin"))
 
     def applyCmakeSettingsForAndroid(self, cmake):
@@ -58,6 +57,7 @@ class GodotCppConan(ConanFile):
         cmake.definitions["ANDROID_TOOLCHAIN"] = "clang"
 
     def applyCmakeSettingsForiOS(self, cmake):
+        variants = []
         ios_toolchain = "cmake-modules/Toolchains/ios.toolchain.cmake"
         cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = ios_toolchain
 
@@ -101,9 +101,10 @@ class GodotCppConan(ConanFile):
                  tools.replace_in_file(cmake_file, "/MD", "/MT")
 
     def runRanlibForiOS(self, lib_dir):
-        for f in os.listdir(lib_dir):
-            if f.endswith(".a") and os.path.isfile(os.path.join(lib_dir,f)) and not os.path.islink(os.path.join(lib_dir,f)):
-                self.run("xcrun ranlib %s" % os.path.join(lib_dir,f))
+        if self.settings.arch != "x86" and self.settings.arch != "x86_64":
+            for f in os.listdir(lib_dir):
+                if f.endswith(".a") and os.path.isfile(os.path.join(lib_dir,f)) and not os.path.islink(os.path.join(lib_dir,f)):
+                    self.run("xcrun ranlib %s" % os.path.join(lib_dir,f))
 
     def package(self):
         self.copy("*", dst="include", src='godot-cpp/include')
