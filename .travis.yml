@@ -167,7 +167,7 @@ matrix:
       
     # iOS - Release
     - os: osx
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       compiler: clang
       env:
         - TARGET_PLATFORM=ios
@@ -176,7 +176,7 @@ matrix:
 
     # iOS - Debug
     - os: osx
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       compiler: clang
       env:
         - TARGET_PLATFORM=ios
@@ -185,7 +185,7 @@ matrix:
 
     # iOS - Simulator
     - os: osx
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       compiler: clang
       env:
         - TARGET_PLATFORM=ios
@@ -194,7 +194,7 @@ matrix:
 
     # macOS - Release
     - os: osx
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       compiler: clang
       env:
         - TARGET_PLATFORM=macos
@@ -203,7 +203,7 @@ matrix:
 
     # macOS - Debug
     - os: osx
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       compiler: clang
       env:
         - TARGET_PLATFORM=macos
