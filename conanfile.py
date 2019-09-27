@@ -53,13 +53,14 @@ class GodotCppConan(ConanFile):
         cmake.definitions["ANDROID_TOOLCHAIN"] = "clang"
 
     def applyCmakeSettingsForiOS(self, cmake):
-        variants = []
         ios_toolchain = "cmake-modules/Toolchains/ios.toolchain.cmake"
         cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = ios_toolchain
+        cmake.definitions["DEPLOYMENT_TARGET"] = "10.0"
+        variants = []
 
         # define all architectures for ios fat library
         if "arm" in self.settings.arch:
-            variants = ["armv7", "armv7s", "armv8"]
+            variants = ["armv7", "armv7s", "armv8", "armv8.3"]
 
         # apply build config for all defined architectures
         if len(variants) > 0:
@@ -69,10 +70,12 @@ class GodotCppConan(ConanFile):
                     archs = tools.to_apple_arch(variants[i])
                 else:
                     archs += ";" + tools.to_apple_arch(variants[i])
-            cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = archs
+            cmake.definitions["ARCHS"] = archs
 
-        if self.settings.arch == "x86" or self.settings.arch == "x86_64":
+        if self.settings.arch == "x86":
             cmake.definitions["IOS_PLATFORM"] = "SIMULATOR"
+        elif self.settings.arch == "x86_64":
+            cmake.definitions["IOS_PLATFORM"] = "SIMULATOR64"
         else:
             cmake.definitions["IOS_PLATFORM"] = "OS"
     
