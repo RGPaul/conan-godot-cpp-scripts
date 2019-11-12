@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # The MIT License (MIT)
 #
-# Copyright (c) 2019 Ralph-Gordon Paul. All rights reserved.
+# Copyright (c) 2018-2019 Ralph-Gordon Paul. All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
@@ -20,32 +20,27 @@
 
 set -e
 
-#=======================================================================================================================
-# settings
+declare ABSOLUTE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-declare CONAN_USER=rgpaul
-declare CONAN_CHANNEL=stable
+# Install conan (windows)
+if [[ "$GITHUB_OS_NAME" == "windows" ]]; then
+    choco install python3;
+    choco install conan;
 
-declare LIBRARY_VERSION=20190914
-declare MACOS_SDK_VERSION=$(xcodebuild -showsdks | grep macosx | awk '{print $4}' | sed 's/[^0-9,\.]*//g')
+# Install conan (linux)
+elif [[ "$GITHUB_OS_NAME" == "linux" ]]; then
+    pip3 install setuptools wheel --user
+    pip3 install conan --user
+    source ~/.profile
 
-#=======================================================================================================================
-# create conan package
+# Install conan (macos)
+elif [[ "$GITHUB_OS_NAME" == "macos" ]]; then
+    pip3 install conan;
+fi
 
-function createConanPackage()
-{
-    local arch=$1
-    local build_type=$2
+# Add conan repository and apply conan config
+conan remote add ${CONAN_REPOSITORY_NAME} ${CONAN_REPOSITORY}
+conan config install ${ABSOLUTE_DIR}/../conan/config.zip
 
-    conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Macos \
-        -s os.version=${MACOS_SDK_VERSION} -s arch=${arch} -s build_type=${build_type} -o shared=False
-}
-
-#=======================================================================================================================
-# create packages for all architectures and build types
-
-createConanPackage x86_64 Release
-createConanPackage x86_64 Debug
-
-# arch x86 is deprecated on macos, so we won't build for x86
-
+# login to conan
+conan user -p "${CONAN_PWD}" -r ${CONAN_REPOSITORY_NAME} ${CONAN_USER}

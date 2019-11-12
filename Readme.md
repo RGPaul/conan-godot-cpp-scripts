@@ -1,9 +1,13 @@
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Android status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Android/badge.svg)
+![iOS status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/iOS/badge.svg)
+![Linux status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Linux/badge.svg)
+![macOS status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/macOS/badge.svg)
+![Windows status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Windows/badge.svg)
+
 # Conan Godot-Cpp
 
-[![Build Status](https://travis-ci.com/Manromen/conan-godot-cpp-scripts.svg?branch=master)](https://travis-ci.com/Manromen/conan-godot-cpp-scripts)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-This repository contains the conan receipe that is used to build the godot-cpp packages at [rgpaul bintray](https://bintray.com/manromen/rgpaul).
+This repository contains a conan receipe that can be used to build godot-cpp packages.
 
 For Infos about godot-cpp please visit [Github](https://github.com/GodotNativeTools/godot-cpp).  
 The library is licensed under the [MIT License](https://github.com/GodotNativeTools/godot-cpp/blob/master/LICENSE.md).  
@@ -16,7 +20,7 @@ The environmental `ANDROID_NDK_PATH` must be set to the path of the android ndk.
 To create a package for Android you can run the following commands like:
 
 `export ANDROID_NDK_PATH='/opt/android-ndks/android-ndk-r19c'`
-`conan create . godot-cpp/20190914@rgpaul/stable -s os=Android -s os.api_level=21 -s compiler=clang -s compiler.version=8.0 -s compiler.libcxx=libc++ -s build_type=Release -o android_ndk=r19c -o android_stl_type=c++_static -s arch=x86_64`
+`conan create . godot-cpp/20190922@rgpaul/stable -s os=Android -s os.api_level=21 -s compiler=clang -s compiler.version=8.0 -s compiler.libcxx=libc++ -s build_type=Release -o android_ndk=r19c -o android_stl_type=c++_static -s arch=x86_64`
 
 ### Requirements
 
@@ -28,7 +32,7 @@ To create a package for Android you can run the following commands like:
 
 To create a package for Debian you can run the conan command like this:
 
-`conan create . godot-cpp/20190914@rgpaul/stable -s os=Linux -s arch=x86_64 -s build_type=Release -o shared=False`
+`conan create . godot-cpp/20190922@rgpaul/stable -s os=Linux -s arch=x86_64 -s build_type=Release -o shared=False`
 
 ### Requirements
 
@@ -40,7 +44,7 @@ To create a package for Debian you can run the conan command like this:
 
 To create a package for iOS you can run the conan command like this:
 
-`conan create . godot-cpp/20190914@rgpaul/stable -s os=iOS -s os.version=12.1 -s arch=armv7 -s build_type=Release -o shared=False`
+`conan create . godot-cpp/20190922@rgpaul/stable -s os=iOS -s os.version=12.1 -s arch=armv7 -s build_type=Release -o shared=False`
 
 ### Requirements
 
@@ -52,7 +56,7 @@ To create a package for iOS you can run the conan command like this:
 
 To create a package for macOS you can run the conan command like this:
 
-`conan create . godot-cpp/20190914@rgpaul/stable -s os=Macos -s os.version=10.14 -s arch=x86_64 -s build_type=Release -o shared=False`
+`conan create . godot-cpp/20190922@rgpaul/stable -s os=Macos -s os.version=10.14 -s arch=x86_64 -s build_type=Release -o shared=False`
 
 ### Requirements
 
@@ -64,7 +68,7 @@ To create a package for macOS you can run the conan command like this:
 
 To create a package for Windows 10 you can run the conan command like this:
 
-`conan create . godot-cpp/20190914@rgpaul/stable -s os=Windows -s compiler="Visual Studio" -s compiler.runtime=MT -s arch=x86_64 -s build_type=Release -o shared=False`
+`conan create . godot-cpp/20190922@rgpaul/stable -s os=Windows -s compiler="Visual Studio" -s compiler.runtime=MT -s arch=x86_64 -s build_type=Release -o shared=False`
 
 ### Requirements
 

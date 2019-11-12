@@ -1,8 +1,8 @@
-#!/usr/bin/env powershell
+#!/usr/bin/env bash
 # ----------------------------------------------------------------------------------------------------------------------
 # The MIT License (MIT)
 #
-# Copyright (c) 2019 Ralph-Gordon Paul. All rights reserved.
+# Copyright (c) 2018-2019 Ralph-Gordon Paul. All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
@@ -18,35 +18,13 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ----------------------------------------------------------------------------------------------------------------------
 
-#=======================================================================================================================
-# settings
+set -e
 
-$CONAN_USER = "rgpaul"
-$CONAN_CHANNEL = "stable"
+declare ARCH=$1
+declare BUILD_TYPE=$2
 
-$LIBRARY_VERSION = "20190914"
-
-#=======================================================================================================================
-# create conan package
-
-function createConanPackage($arch, $build_type)
-{
-    $runtime = "MT"
-
-    if ($build_type.equals("Debug"))
-    {
-        $runtime = "MTd"
-    }
-
-    conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Windows `
-        -s compiler="Visual Studio" -s compiler.runtime=$runtime -s arch=${arch} -s build_type=${build_type} -o shared=False
-}
-
-#=======================================================================================================================
-# create packages for all architectures and build types
-
-createConanPackage "x86_64" "Release"
-createConanPackage "x86_64" "Debug"
-
-createConanPackage "x86" "Release"
-createConanPackage "x86" "Debug"
+export IOS_SDK_VERSION=$(xcodebuild -showsdks | grep iphoneos | awk '{print $4}' | sed 's/[^0-9,\.]*//g');
+echo "iOS SDK ${IOS_SDK_VERSION}";
+      
+conan create . ${CONAN_PACKAGE_NAME}/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=iOS \
+    -s os.version=${IOS_SDK_VERSION} -s arch=$ARCH -s build_type=$BUILD_TYPE -o shared=False;

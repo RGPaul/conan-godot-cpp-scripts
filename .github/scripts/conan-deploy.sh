@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # The MIT License (MIT)
 #
-# Copyright (c) 2019 Ralph-Gordon Paul. All rights reserved.
+# Copyright (c) 2018-2019 Ralph-Gordon Paul. All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
@@ -20,32 +20,13 @@
 
 set -e
 
-#=======================================================================================================================
-# settings
+if [ "${GITHUB_OS_NAME}" == "linux" ]; then
+    source ~/.profile
+fi
 
-declare CONAN_USER=rgpaul
-declare CONAN_CHANNEL=stable
+# login to conan bintray
+conan user -p "${CONAN_PWD}" -r "${CONAN_REPOSITORY_NAME}" "${CONAN_USER}"
 
-declare LIBRARY_VERSION=20190914
-declare IOS_SDK_VERSION=$(xcodebuild -showsdks | grep iphoneos | awk '{print $4}' | sed 's/[^0-9,\.]*//g')
-
-#=======================================================================================================================
-# create conan package
-
-function createConanPackage()
-{
-    local arch=$1
-    local build_type=$2
-
-    conan create . godot-cpp/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=iOS \
-        -s os.version=${IOS_SDK_VERSION} -s arch=${arch} -s build_type=${build_type} -o shared=False
-}
-
-#=======================================================================================================================
-# create packages for all architectures and build types
-
-# iOS (any arm arch will build fat libraries with armv7, armv7s, armv8 and armv8.3 and set arch to 'AnyARM')
-createConanPackage armv8 Release
-createConanPackage armv8 Debug
-# SIMULATOR
-createConanPackage x86_64 Debug
+# upload all related packages
+conan upload "${CONAN_PACKAGE_NAME}/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL}" -r "${CONAN_REPOSITORY_NAME}" \
+    --all --confirm

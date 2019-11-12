@@ -1,0 +1,74 @@
+name: iOS
+
+env:
+  CONAN_REPOSITORY: https://conan.rgpaul.com
+  CONAN_REPOSITORY_NAME: rgpaul
+  CONAN_PACKAGE_NAME: godot-cpp
+  CONAN_USER: rgpaul
+  CONAN_CHANNEL: stable
+
+on:
+  create:
+    ref_type: tag
+
+jobs:
+  
+  Device-Release:
+    runs-on: macOS-latest
+    env:
+      GITHUB_OS_NAME: macos
+      DEVELOPER_DIR: /Applications/Xcode_11.1.app/Contents/Developer
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+    - uses: actions/checkout@master
+      with:
+        submodules: true
+        ref: ${{ github.sha }}
+    - name: get version from tag
+      run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+    - name: install and setup conan
+      run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: create conan packages
+      run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh armv8 Release
+    - name: deploy conan packages
+      run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
+
+  Device-Debug:
+    runs-on: macOS-latest
+    env:
+      GITHUB_OS_NAME: macos
+      DEVELOPER_DIR: /Applications/Xcode_11.1.app/Contents/Developer
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+    - uses: actions/checkout@master
+      with:
+        submodules: true
+        ref: ${{ github.sha }}
+    - name: get version from tag
+      run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+    - name: install and setup conan
+      run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: create conan packages
+      run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh armv8 Debug
+    - name: deploy conan packages
+      run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
+
+  Simulator:
+    runs-on: macOS-latest
+    env:
+      GITHUB_OS_NAME: macos
+      DEVELOPER_DIR: /Applications/Xcode_11.1.app/Contents/Developer
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+    - uses: actions/checkout@master
+      with:
+        submodules: true
+        ref: ${{ github.sha }}
+    - name: get version from tag
+      run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+    - name: install and setup conan
+      run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: create conan packages
+      run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh x86_64 Debug
+    - name: deploy conan packages
+      run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
