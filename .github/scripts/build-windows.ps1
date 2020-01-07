@@ -41,6 +41,34 @@ function createConanPackage($arch, $build_type)
 }
 
 #=======================================================================================================================
-# create packages for all architectures and build types
+# create zip file
+
+function createZipFile($arch, $build_type)
+{
+    $runtime = "MT"
+
+    if ($build_type.equals("Debug"))
+    {
+        $runtime = "MTd"
+    }
+
+    conan install .github/conan ${env:CONAN_PACKAGE_NAME}/${env:LIBRARY_VERSION}@${env:CONAN_USER}/${env:CONAN_CHANNEL}  `
+        -s os=Windows -s compiler="Visual Studio" -s compiler.runtime=$runtime -s arch=${arch}  `
+        -s build_type=${build_type}
+
+    New-Item -Path . -Name "output" -ItemType "Directory"
+
+    $zip_file = "output\godot-cpp-${env:LIBRARY_VERSION}-windows-${arch}-${build_type}.zip"
+
+    Compress-Archive -Path "deps\*" -Force -DestinationPath ${zip_file}.tolower()
+}
+
+#=======================================================================================================================
+# create package for architecture and build type
 
 createConanPackage $ARCH $BUILD_TYPE
+
+#=======================================================================================================================
+# create zip file from package contents
+
+createZipFile $ARCH $BUILD_TYPE

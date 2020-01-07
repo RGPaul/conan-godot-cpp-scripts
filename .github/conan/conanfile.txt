@@ -1,0 +1,11 @@
+[requires]
+godot-cpp/20191217@rgpaul/stable
+
+[options]
+godot-cpp:shared=False
+
+[imports]
+lib, *.a -> ./deps/lib
+lib, *.lib -> ./deps/lib
+include, *.h -> ./deps/include
+include, *.hpp -> ./deps/include

@@ -35,6 +35,10 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh armv8 Release
+    - uses: actions/upload-artifact@v1
+      with:
+        name: godot-cpp-ios
+        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -60,6 +64,10 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh armv8 Debug
+    - uses: actions/upload-artifact@v1
+      with:
+        name: godot-cpp-ios
+        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -85,5 +93,9 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh x86_64 Debug
+    - uses: actions/upload-artifact@v1
+      with:
+        name: godot-cpp-ios
+        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh

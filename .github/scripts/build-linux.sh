@@ -27,5 +27,23 @@ if [ "${GITHUB_OS_NAME}" == "linux" ]; then
     source ~/.profile
 fi
 
+#=======================================================================================================================
+# create package for architecture and build type
+
 conan create . ${CONAN_PACKAGE_NAME}/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Linux -s arch=$ARCH \
-    -s build_type=$BUILD_TYPE -o shared=False;
+    -s build_type=$BUILD_TYPE -o shared=False
+
+#=======================================================================================================================
+# create zip file from package contents
+
+declare BUILD_TYPE_LOWER="$(echo ${BUILD_TYPE} | tr '[:upper:]' '[:lower:]')"
+declare ZIP_FILENAME="godot-cpp-${LIBRARY_VERSION}-linux-${ARCH}-${BUILD_TYPE_LOWER}.zip"
+
+mkdir deps || true
+mkdir output || true
+
+conan install .github/conan ${CONAN_PACKAGE_NAME}/${LIBRARY_VERSION}@${CONAN_USER}/${CONAN_CHANNEL} -s os=Linux \
+    -s arch=$ARCH -s build_type=$BUILD_TYPE
+
+cd deps
+zip -r "../output/${ZIP_FILENAME}" *

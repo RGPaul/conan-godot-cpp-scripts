@@ -124,9 +124,25 @@ function createConanPackage()
 }
 
 #=======================================================================================================================
-# create packages for all architectures and build types
+# create package for architecture and build type
 
 getAndroidNdkVersion
 getCompilerVersion
 
 createConanPackage $ARCH $API_LEVEL $BUILD_TYPE
+
+#=======================================================================================================================
+# create zip file from package contents
+
+declare BUILD_TYPE_LOWER="$(echo ${BUILD_TYPE} | tr '[:upper:]' '[:lower:]')"
+declare ZIP_FILENAME="godot-cpp-${LIBRARY_VERSION}-android-${ARCH}-${API_LEVEL}-${BUILD_TYPE_LOWER}.zip"
+
+mkdir deps || true
+mkdir output || true
+
+conan install .github/conan -s os=Android -s os.api_level=${API_LEVEL} -s compiler=${TOOLCHAIN_VERSION} \
+    -s compiler.version=${COMPILER_VERSION} -s compiler.libcxx=${COMPILER_LIBCXX} -s build_type=${BUILD_TYPE} \
+    -o godot-cpp:android_ndk=${NDK_VERSION} -o godot-cpp:android_stl_type=${STL_TYPE} -s arch=${ARCH}
+
+cd deps
+zip -r "../output/${ZIP_FILENAME}" *
