@@ -1,9 +1,9 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Android status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Android/badge.svg)
-![iOS status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/iOS/badge.svg)
-![Linux status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Linux/badge.svg)
-![macOS status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/macOS/badge.svg)
-![Windows status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Windows/badge.svg)
+[![Android status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Android/badge.svg)](https://github.com/RGPaul/conan-godot-cpp-scripts/actions?query=workflow%3AAndroid)
+[![iOS status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/iOS/badge.svg)](https://github.com/RGPaul/conan-godot-cpp-scripts/actions?query=workflow%3AiOS)
+[![Linux status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Linux/badge.svg)](https://github.com/RGPaul/conan-godot-cpp-scripts/actions?query=workflow%3ALinux)
+[![macOS status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/macOS/badge.svg)](https://github.com/RGPaul/conan-godot-cpp-scripts/actions?query=workflow%3AmacOS)
+[![Windows status](https://github.com/rgpaul/conan-godot-cpp-scripts/workflows/Windows/badge.svg)](https://github.com/RGPaul/conan-godot-cpp-scripts/actions?query=workflow%3AWindows)
 
 # Conan Godot-Cpp
 
