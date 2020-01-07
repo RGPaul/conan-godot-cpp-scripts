@@ -98,7 +98,7 @@ function getCompilerVersion()
         "r19c")
             COMPILER_VERSION=8.0
             ;;
-        "r20")
+        "r20b")
             COMPILER_VERSION=8.0
             ;;
             
