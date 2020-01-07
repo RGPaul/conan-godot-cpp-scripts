@@ -19,10 +19,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
@@ -38,10 +43,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
@@ -57,10 +67,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
@@ -76,10 +91,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
@@ -95,10 +115,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
@@ -114,10 +139,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
@@ -133,10 +163,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
@@ -152,10 +187,15 @@ jobs:
       GITHUB_OS_NAME: linux
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
-        submodules: true
         ref: ${{ github.sha }}
+    - name: checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
     - name: get version from tag
       run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
     - name: install and setup conan
