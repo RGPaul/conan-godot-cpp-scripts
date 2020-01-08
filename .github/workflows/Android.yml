@@ -34,10 +34,6 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv7 19 Release
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -62,10 +58,6 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv7 19 Debug
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -90,10 +82,6 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv8 21 Release
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -118,10 +106,6 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv8 21 Debug
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -146,10 +130,6 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86 19 Release
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -174,10 +154,6 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86 19 Debug
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -202,10 +178,6 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86_64 21 Release
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
 
@@ -230,9 +202,5 @@ jobs:
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86_64 21 Debug
-    - uses: actions/upload-artifact@v1
-      with:
-        name: godot-cpp-android
-        path: output
     - name: deploy conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-deploy.sh
