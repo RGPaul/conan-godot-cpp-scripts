@@ -1,0 +1,356 @@
+name: Release
+
+env:
+  CONAN_REPOSITORY: https://conan.rgpaul.com
+  CONAN_REPOSITORY_NAME: rgpaul
+  CONAN_PACKAGE_NAME: godot-cpp
+  CONAN_USER: rgpaul
+  CONAN_CHANNEL: stable
+
+on:
+  release:
+    types: [created]
+
+jobs:
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Android
+# ----------------------------------------------------------------------------------------------------------------------
+
+  Android-armv7:
+    runs-on: ubuntu-18.04
+    env:
+      GITHUB_OS_NAME: linux
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+      - name: install and setup conan
+        run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+      - name: create conan packages
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv7 19 Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-android-armv7-19-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-android-armv7-19-release.zip
+          asset_content_type: application/zip
+
+  Android-armv8:
+    runs-on: ubuntu-18.04
+    env:
+      GITHUB_OS_NAME: linux
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+      - name: install and setup conan
+        run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+      - name: create conan packages
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv8 21 Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-android-armv8-21-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-android-armv8-21-release.zip
+          asset_content_type: application/zip
+
+  Android-x86:
+    runs-on: ubuntu-18.04
+    env:
+      GITHUB_OS_NAME: linux
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+      - name: install and setup conan
+        run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+      - name: create conan packages
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86 19 Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-android-x86-19-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-android-x86-19-release.zip
+          asset_content_type: application/zip
+
+  Android-x86_64:
+    runs-on: ubuntu-18.04
+    env:
+      GITHUB_OS_NAME: linux
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+      - name: install and setup conan
+        run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+      - name: create conan packages
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86_64 21 Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-android-x86_64-21-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-android-x86_64-21-release.zip
+          asset_content_type: application/zip
+
+# ----------------------------------------------------------------------------------------------------------------------
+# iOS
+# ----------------------------------------------------------------------------------------------------------------------
+  
+  iOS:
+    runs-on: macOS-latest
+    env:
+      GITHUB_OS_NAME: macos
+      DEVELOPER_DIR: /Applications/Xcode_11.2.1.app/Contents/Developer
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+      - name: install and setup conan
+        run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+      - name: create conan packages
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh armv8 Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-ios-armv8-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-ios-armv8-release.zip
+          asset_content_type: application/zip
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Linux
+# ----------------------------------------------------------------------------------------------------------------------
+
+  Linux-x86_64:
+    runs-on: ubuntu-18.04
+    env:
+      GITHUB_OS_NAME: linux
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+      - name: install and setup conan
+        run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+      - name: create conan packages
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-linux.sh x86_64 Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-linux-x86_64-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-linux-x86_64-release.zip
+          asset_content_type: application/zip
+
+# ----------------------------------------------------------------------------------------------------------------------
+# macOS
+# ----------------------------------------------------------------------------------------------------------------------
+
+  macOS-x86_64:
+    runs-on: macOS-latest
+    env:
+      GITHUB_OS_NAME: macos
+      DEVELOPER_DIR: /Applications/Xcode_11.2.1.app/Contents/Developer
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+      - name: install and setup conan
+        run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+      - name: create conan packages
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-macos.sh x86_64 Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-macos-x86_64-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-macos-x86_64-release.zip
+          asset_content_type: application/zip
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Windows
+# ----------------------------------------------------------------------------------------------------------------------
+
+  Windows-x86_64:
+    runs-on: windows-2019
+    env:
+      GITHUB_OS_NAME: windows
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+        shell: bash
+      - name: install and setup conan
+        run: powershell -File ${env:GITHUB_WORKSPACE}\.github\scripts\conan-setup.ps1
+        shell: powershell
+      - name: create conan packages
+        run: powershell -File ${env:GITHUB_WORKSPACE}\.github\scripts\build-windows.ps1 -ARCH x86_64 -BUILD_TYPE Release
+        shell: powershell
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-windows-x86_64-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-windows-x86_64-release.zip
+          asset_content_type: application/zip
+
+  Windows-x86:
+    runs-on: windows-2019
+    env:
+      GITHUB_OS_NAME: windows
+      CONAN_PWD: ${{ secrets.CONAN_PWD }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }}
+      - name: checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive
+      - name: get version from tag
+        run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
+        shell: bash
+      - name: install and setup conan
+        run: powershell -File ${env:GITHUB_WORKSPACE}\.github\scripts\conan-setup.ps1
+        shell: powershell
+      - name: create conan packages
+        run: powershell -File ${env:GITHUB_WORKSPACE}\.github\scripts\build-windows.ps1 -ARCH x86 -BUILD_TYPE Release
+        shell: powershell
+      - uses: actions/upload-artifact@v1
+        with:
+          name: godot-cpp
+          path: output
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.upload_url }}
+          asset_path: ./output/godot-cpp-${{ env.LIBRARY_VERSION }}-windows-x86-release.zip
+          asset_name: godot-cpp-${{ env.LIBRARY_VERSION }}-windows-x86-release.zip
+          asset_content_type: application/zip
