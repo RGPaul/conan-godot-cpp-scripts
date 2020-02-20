@@ -101,6 +101,9 @@ function getCompilerVersion()
         "r20b")
             COMPILER_VERSION=8.0
             ;;
+        "r21")
+            COMPILER_VERSION=9.0
+            ;;
             
         *)
             echo "Unknown Compiler version for Android NDK ${NDK_VERSION}"
