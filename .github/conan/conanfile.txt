@@ -1,5 +1,5 @@
 [requires]
-godot-cpp/20191217@rgpaul/stable
+godot-cpp/3.2@rgpaul/stable
 
 [options]
 godot-cpp:shared=False
