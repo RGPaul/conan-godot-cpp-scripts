@@ -17,7 +17,7 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_OS_NAME: macos
-      DEVELOPER_DIR: /Applications/Xcode_11.2.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_11.3.1.app/Contents/Developer
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
     - uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_OS_NAME: macos
-      DEVELOPER_DIR: /Applications/Xcode_11.2.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_11.3.1.app/Contents/Developer
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
     - uses: actions/checkout@v2
