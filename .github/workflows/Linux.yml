@@ -24,9 +24,9 @@ jobs:
         with:
           ref: ${{ github.sha }}
       - name: fetch all tags and all history for all tags and branches
-      run: |
-        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-        git fetch --prune --unshallow
+        run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          git fetch --prune --unshallow
       - name: checkout submodules
         run: |
           auth_header="$(git config --local --get http.https://github.com/.extraheader)"
@@ -51,9 +51,9 @@ jobs:
         with:
           ref: ${{ github.sha }}
       - name: fetch all tags and all history for all tags and branches
-      run: |
-        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-        git fetch --prune --unshallow
+        run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          git fetch --prune --unshallow
       - name: checkout submodules
         shell: bash
         run: |
