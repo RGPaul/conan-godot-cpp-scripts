@@ -64,11 +64,7 @@ class GodotCppConan(ConanFile):
         else:
             cmake.definitions["PLATFORM"] = "OS"
 
-        # define all architectures for ios fat library
-        if "arm" in self.settings.arch:
-            cmake.definitions["ARCHS"] = "armv7;armv7s;arm64;arm64e"
-        else:
-            cmake.definitions["ARCHS"] = tools.to_apple_arch(self.settings.arch)
+        cmake.definitions["ARCHS"] = tools.to_apple_arch(self.settings.arch)
     
     def applyCmakeSettingsFormacOS(self, cmake):
         cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = tools.to_apple_arch(self.settings.arch)
