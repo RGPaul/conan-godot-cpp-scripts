@@ -99,10 +99,6 @@ class GodotCppConan(ConanFile):
         self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.includedirs = ['include']
 
-    def package_id(self):
-        if "arm" in self.settings.arch and self.settings.os == "iOS":
-            self.info.settings.arch = "AnyARM"
-
     def config_options(self):
         # remove android specific option for all other platforms
         if self.settings.os != "Android":
