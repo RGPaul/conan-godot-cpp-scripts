@@ -152,7 +152,7 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_OS_NAME: macos
-      DEVELOPER_DIR: /Applications/Xcode_11.2.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_11.4.1.app/Contents/Developer
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
       - uses: actions/checkout@v2
@@ -168,8 +168,10 @@ jobs:
         run: echo ::set-env name=LIBRARY_VERSION::$(echo ${GITHUB_REF:10})
       - name: install and setup conan
         run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
-      - name: create conan packages
+      - name: create conan packages armv8
         run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh armv8 Release
+      - name: create conan packages armv7
+        run: ${GITHUB_WORKSPACE}/.github/scripts/build-ios.sh armv7 Release
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1.0.1
         env:
@@ -222,7 +224,7 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_OS_NAME: macos
-      DEVELOPER_DIR: /Applications/Xcode_11.2.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_11.4.1.app/Contents/Developer
       CONAN_PWD: ${{ secrets.CONAN_PWD }}
     steps:
       - uses: actions/checkout@v2
