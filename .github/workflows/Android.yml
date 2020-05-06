@@ -6,6 +6,7 @@ env:
   CONAN_PACKAGE_NAME: godot-cpp
   CONAN_USER: rgpaul
   CONAN_CHANNEL: stable
+  ANDROID_NDK_VERSION: r21b
 
 on: 
   push:
@@ -37,6 +38,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv7 19 Release
     - name: deploy conan packages
@@ -65,6 +68,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv7 19 Debug
     - name: deploy conan packages
@@ -93,6 +98,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv8 21 Release
     - name: deploy conan packages
@@ -121,6 +128,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh armv8 21 Debug
     - name: deploy conan packages
@@ -149,6 +158,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86 19 Release
     - name: deploy conan packages
@@ -177,6 +188,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86 19 Debug
     - name: deploy conan packages
@@ -205,6 +218,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86_64 21 Release
     - name: deploy conan packages
@@ -233,6 +248,8 @@ jobs:
       run: echo ::set-env name=LIBRARY_VERSION::$(git describe --abbrev=0 --tags)
     - name: install and setup conan
       run: ${GITHUB_WORKSPACE}/.github/scripts/conan-setup.sh
+    - name: install android ndk
+      run: ${GITHUB_WORKSPACE}/.github/scripts/install-android-ndk.sh
     - name: create conan packages
       run: ${GITHUB_WORKSPACE}/.github/scripts/build-android.sh x86_64 21 Debug
     - name: deploy conan packages

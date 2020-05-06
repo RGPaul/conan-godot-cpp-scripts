@@ -31,14 +31,14 @@ declare TOOLCHAIN_VERSION=clang
 declare COMPILER_VERSION=8.0
 declare COMPILER_LIBCXX=libc++
 declare STL_TYPE=c++_static
-declare ANDROID_NDK_PATH=$ANDROID_SDK_ROOT/ndk-bundle
+#export ANDROID_NDK_PATH=$ANDROID_SDK_ROOT/ndk-bundle
+export ANDROID_NDK_PATH="${GITHUB_WORKSPACE}/android-ndk-${ANDROID_NDK_VERSION}"
 
 declare ARCH=$1
 declare API_LEVEL=$2
 declare BUILD_TYPE=$3
 
 echo "using NDK Path: ${ANDROID_NDK_PATH}"
-export ANDROID_NDK_PATH=${ANDROID_NDK_PATH}
 
 #=======================================================================================================================
 
@@ -102,6 +102,9 @@ function getCompilerVersion()
             COMPILER_VERSION=8.0
             ;;
         "r21")
+            COMPILER_VERSION=9.0
+            ;;
+        "r21b")
             COMPILER_VERSION=9.0
             ;;
             
